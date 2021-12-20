@@ -5,14 +5,12 @@ import br.com.alura.school.course.CourseRepository;
 import br.com.alura.school.user.User;
 import br.com.alura.school.user.UserRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -23,10 +21,18 @@ public class EnrollmentController {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
-    public EnrollmentController(CourseRepository courseRepository, UserRepository userRepository) {
+    public EnrollmentController(CourseRepository courseRepository, UserRepository userRepository, EnrollmentRepository enrollmentRepository) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
+        this.enrollmentRepository = enrollmentRepository;
+    }
+
+    @GetMapping("/courses/enroll/report")
+    ResponseEntity<List<EnrollmentResponse>> getEnrollReport() {
+        List<EnrollmentResponse> enrollReport = enrollmentRepository.enrollReport();
+        return enrollReport.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(enrollReport);
     }
 
     @PostMapping("/courses/{courseCode}/enroll")
