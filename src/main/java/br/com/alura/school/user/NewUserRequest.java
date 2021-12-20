@@ -7,11 +7,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-
 class NewUserRequest {
 
     @Unique(entity = User.class, field = "username")
-    @Size(max=20)
+    @Size(max = 20)
     @NotBlank
     @JsonProperty
     private final String username;
